@@ -1,0 +1,3 @@
+# Copy the settings you need into your .Renviron, then restart the R session.
+VINCULUM_NOPROXY=server.company.org
+VINCULUM_CA_BUNDLE="C:/Users/your-name/certs/api-ca.pem"

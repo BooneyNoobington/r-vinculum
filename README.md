@@ -30,6 +30,27 @@ result$truncated
 
 Pass `token =` to `vinculum_client()` to supply a token explicitly. The request timeout defaults to 30 seconds and can be set with `timeout =`.
 
+### Corporate proxy and private CA
+
+For a service reached directly, set `noproxy` to its hostname. Use `"*"` to match curl's `--noproxy "*"` for this client. Set `ca_bundle` to the PEM CA certificate or bundle provided by the operator of Vinculum's HTTPS endpoint. The client uses that file to verify the certificate chain and checks the server hostname.
+
+```r
+client <- vinculum_client(
+  "https://server.company.org/vinculum",
+  noproxy = "server.company.org",
+  ca_bundle = "C:/Users/your-name/certs/api-ca.pem"
+)
+```
+
+For persistent settings in RStudio, add the values below to your `.Renviron` and restart the R session. A copy is included in `.Renviron.example`. Use the bare hostname for `VINCULUM_NOPROXY`, and forward slashes in the Windows file path.
+
+```dotenv
+VINCULUM_NOPROXY=server.company.org
+VINCULUM_CA_BUNDLE="C:/Users/your-name/certs/api-ca.pem"
+```
+
+Explicit constructor arguments take precedence over these environment variables. An empty string uses curl's default behavior for that setting.
+
 ### Parameters and results
 
 | Parameter | R value in `params` | JSON value |
@@ -70,4 +91,4 @@ git commit -m "Add Vinculum R client"
 gh repo create OWNER/vinculum-r --private --source=. --push
 ```
 
-Run package checks with `R CMD build vinculum-r` from the parent directory, then `R CMD check --no-manual vinculum_0.1.0.tar.gz`.
+Run package checks with `R CMD build vinculum-r` from the parent directory, then `R CMD check --no-manual vinculum_0.1.1.tar.gz`.

@@ -1,6 +1,7 @@
 library(vinculum)
 
 Sys.setenv(VINCULUM_TOKEN = "fixture-token")
+Sys.unsetenv(c("VINCULUM_NOPROXY", "VINCULUM_CA_BUNDLE"))
 client <- vinculum_client("https://proxy.test/vinculum/")
 stopifnot(!any(grepl("fixture-token", capture.output(print(client)), fixed = TRUE)))
 
@@ -59,3 +60,25 @@ stopifnot(
   failed$status_code == 502L,
   conditionMessage(failed) == "no such table: measurements"
 )
+
+ca_path <- tempfile(pattern = "Vinculum test CA ", fileext = ".pem")
+writeLines("CA path fixture", ca_path)
+Sys.setenv(VINCULUM_NOPROXY = "proxy.test", VINCULUM_CA_BUNDLE = ca_path)
+configured <- vinculum_client("https://proxy.test/vinculum")
+httr2::with_mocked_responses(
+  function(req) {
+    stopifnot(
+      identical(req$options$noproxy, "proxy.test"),
+      identical(req$options$cainfo, normalizePath(ca_path, winslash = "/"))
+    )
+    httr2::response(body = charToRaw(empty))
+  },
+  invisible(vinculum_query(configured, "no_params"))
+)
+
+overridden <- vinculum_client("https://proxy.test/vinculum", noproxy = "*", ca_bundle = "")
+stopifnot(
+  identical(overridden$request$options$noproxy, "*"),
+  is.null(overridden$request$options$cainfo)
+)
+unlink(ca_path)

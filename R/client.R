@@ -1,6 +1,8 @@
 #' Create a Vinculum client
 vinculum_client <- function(base_url, token = Sys.getenv("VINCULUM_TOKEN"),
-                            timeout = 30) {
+                            timeout = 30,
+                            noproxy = Sys.getenv("VINCULUM_NOPROXY"),
+                            ca_bundle = Sys.getenv("VINCULUM_CA_BUNDLE")) {
   url_error <- "base_url must be an HTTP or HTTPS URL without credentials, a query, or a fragment."
   if (!is_string(base_url) || !grepl("^https?://", base_url, ignore.case = TRUE) ||
       grepl("[?#]", base_url)) {
@@ -26,6 +28,22 @@ vinculum_client <- function(base_url, token = Sys.getenv("VINCULUM_TOKEN"),
     httr2::req_timeout(timeout) |>
     httr2::req_options(followlocation = FALSE) |>
     httr2::req_error(is_error = function(response) FALSE)
+
+  if (!identical(noproxy, "")) {
+    if (!is_string(noproxy)) {
+      stop("noproxy must be a single string of hostnames or '*'.", call. = FALSE)
+    }
+    request <- httr2::req_options(request, noproxy = noproxy)
+  }
+  if (!identical(ca_bundle, "")) {
+    if (!is_string(ca_bundle) || !file.exists(ca_bundle) || dir.exists(ca_bundle) ||
+        file.access(ca_bundle, 4L) != 0L) {
+      stop("ca_bundle must point to a readable PEM certificate file.", call. = FALSE)
+    }
+    request <- httr2::req_options(
+      request, cainfo = normalizePath(ca_bundle, winslash = "/", mustWork = TRUE)
+    )
+  }
   structure(list(request = request), class = "vinculum_client")
 }
 
