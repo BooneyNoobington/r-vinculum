@@ -1,0 +1,11 @@
+Package: vinculum
+Title: Query the Vinculum API
+Version: 0.1.0
+Authors@R: person("Vinculum", "Maintainers", role = c("aut", "cre"),
+    email = "maintainer@example.org")
+Description: Run configured Vinculum queries with bearer authentication and
+    named JSON parameters. Return tabular data alongside result metadata.
+License: file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports: httr2 (>= 1.0.0), jsonlite
