@@ -1,0 +1,4 @@
+^\.gitignore$
+^\.Renviron(\.example)?$
+^\.Rproj\.user$
+^.*\.Rproj$
