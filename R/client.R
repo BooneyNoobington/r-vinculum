@@ -68,7 +68,7 @@ vinculum_query <- function(client, name, params = list(),
   }
   tabular <- match.arg(as) == "data.frame"
 
-  request <- httr2::req_url_path_append(client$request, "queries", name)
+  request <- httr2::req_url_path_append(client$request, "v1", "queries", name)
   if (length(params)) {
     request <- httr2::req_body_json(
       request, params, auto_unbox = TRUE, null = "null", na = "null", digits = NA

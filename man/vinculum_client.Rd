@@ -11,8 +11,8 @@ vinculum_client(
 )
 }
 \arguments{
-\item{base_url}{The Vinculum service URL, including any path prefix such as
-\code{/vinculum}.}
+\item{base_url}{The deployment URL, including any reverse proxy prefix such as
+\code{/vinculum}. The client appends \code{/v1/queries/} and the query name.}
 \item{token}{The bearer token. Defaults to the \code{VINCULUM_TOKEN}
 environment variable.}
 \item{timeout}{The maximum request time in seconds.}

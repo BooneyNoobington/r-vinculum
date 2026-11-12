@@ -9,7 +9,7 @@ ok <- '{"rows":[{"amount":"12.5000","large":9223372036854775807}],"row_count":1,
 for (ids in list(integer(), 1L, 1:3)) {
   mock <- function(req) {
     stopifnot(
-      identical(req$url, "https://proxy.test/vinculum/queries/by_ids"),
+      identical(req$url, "https://proxy.test/vinculum/v1/queries/by_ids"),
       identical(req$method, "POST"),
       as.character(req$headers[["Authorization"]]) == "Bearer fixture-token"
     )

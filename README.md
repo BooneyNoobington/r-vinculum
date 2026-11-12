@@ -1,6 +1,6 @@
 # Vinculum for R
 
-Run configured Vinculum queries from R. The package returns a data frame by default and exposes the API's row count and truncation flag.
+Run configured queries from R using the v1 API introduced in Vinculum 0.2.0. The package returns a data frame by default and exposes the API's row count and truncation flag.
 
 ## Install
 
@@ -15,7 +15,7 @@ For a private repository, authenticate `remotes` with `GITHUB_PAT`. To install f
 
 ## Query
 
-Set `VINCULUM_TOKEN` in your environment before starting R. Use the service URL including its prefix and substitute one of your configured query names. This example uses the API demo's list endpoint.
+Set `VINCULUM_TOKEN` in your environment before starting R. Pass the deployment URL, including any reverse proxy prefix such as `/vinculum`. The client appends `/v1/queries/{name}`. This example uses the API demo's list endpoint.
 
 ```r
 library(vinculum)
@@ -91,4 +91,4 @@ git commit -m "Add Vinculum R client"
 gh repo create OWNER/vinculum-r --private --source=. --push
 ```
 
-Run package checks with `R CMD build vinculum-r` from the parent directory, then `R CMD check --no-manual vinculum_0.1.1.tar.gz`.
+Run package checks with `R CMD build vinculum-r` from the parent directory, then `R CMD check --no-manual vinculum_0.2.0.tar.gz`.
